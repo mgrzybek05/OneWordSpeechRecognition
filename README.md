@@ -1,4 +1,4 @@
-# Speech recognition platform using Google speech dataset
+# One Word Speech recognition platform using Google speech dataset
 An implementation that uses the speech recognition infrastructure provided by Tensorflow and the speech commands dataset from Google.
 
 ## Audio dataset
