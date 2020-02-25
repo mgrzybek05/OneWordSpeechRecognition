@@ -8,9 +8,7 @@ sys.path.insert(0, "../classification")
 from classifier import classify_sound
 
 address_list = [
-    '10.11.245.212',
-    '10.11.170.148',
-    '10.11.246.184',
+    '10.11.155.159',
 ]
 
 def send_to_server(results):
@@ -62,14 +60,12 @@ def get_sound_data():
 				while True:
 					recieve = connection.recv(2048)
 					size_count += len(recieve)
-					if not recieve or recieve == "" or size_count > 312000:
+					if not recieve or recieve == "" or size_count > 3140000:
 						f.write(recieve)
 						break
 					f.write(recieve)
 					end = datetime.now().timestamp()
-					os.chdir('../')
-					result[id_counter] = classify('RPM.h5','sound_from_client.py')
-					os.chdir('communication')
+					result[id_counter] = classify_sound('RPM.h5','sound_from_client.wav')
 					connection.send("Done".encode('utf-8'))
 					connection.close()
 					print("Done")
@@ -83,4 +79,5 @@ def get_sound_data():
 	
 if __name__ == "__main__":	
 	value = get_sound_data()
+	print(value)
 	#send_to_server(value)
