@@ -1,11 +1,11 @@
 import os
 import time
 import socket
-import socket
-import os
-import time
+import sys
 from datetime import datetime
-from user_model import classify
+
+sys.path.insert(0, "../classification")
+from classifier import classify_sound
 
 address_list = [
     '10.11.245.212',
@@ -13,7 +13,7 @@ address_list = [
     '10.11.246.184',
 ]
 
-def send_to_server(results)
+def send_to_server(results):
 	exit_client = False
 	while exit_client == False:	
 		connected = False
@@ -40,47 +40,46 @@ def send_to_server(results)
 		time.sleep(1)	
 		from_server = client.recv(1024)
 
-def get_sound_data()
-    server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    server.bind(("10.16.9.113", 32500))
-    server.listen(5)
+def get_sound_data():
+	server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+	server.bind(("10.16.9.113", 32500))
+	server.listen(5)
 
-    id_counter = 0
-    it_counter = 0
+	id_counter = 0
+	it_counter = 0
 	results = [ 0, 0, 0 ]
-    while True:
-        connection, address = server.accept()
-        print(address)
-        if address[0] != address_list[id_counter]:
-            connection.close()
-            print("Skip")
-        else:
+	while True:
+		connection, address = server.accept()
+		print(address)
+		if address[0] != address_list[id_counter]:
+			connection.close()
+			print("Skip")
+		else:
+			start = datetime.now().timestamp()
+			file_name = "sound_from_client.wav"
+			size_count = 0
+			with open(file_name, "wb") as f:
+				while True:
+					recieve = connection.recv(2048)
+					size_count += len(recieve)
+					if not recieve or recieve == "" or size_count > 312000:
+						f.write(recieve)
+						break
+					f.write(recieve)
+					end = datetime.now().timestamp()
+					os.chdir('../')
+					result[id_counter] = classify('RPM.h5','sound_from_client.py')
+					os.chdir('communication')
+					connection.send("Done".encode('utf-8'))
+					connection.close()
+					print("Done")
 
-            start = datetime.now().timestamp()
-            file_name = "sound_from_client.wav"
-            size_count = 0
-            with open(file_name, "wb") as f:
-                while True:
-                    recieve = connection.recv(2048)
-                    size_count += len(recieve)
-                    if not recieve or recieve == "" or size_count > 312000:
-                        f.write(recieve)
-                        break
-                    f.write(recieve)
-            end = datetime.now().timestamp()
-			os.chdir('../')
-			result[id_counter] = classify('RPM.h5','sound_from_client.py')
-			os.chdir('communication')
-            connection.send("Done".encode('utf-8'))
-            connection.close()
-            print("Done")
-        
-            id_counter+=1
-            if id_counter >= len(address_list):
-                id_counter = 0
-            it_counter+=1
-            print("{} {}".format(it_counter, id_counter))
-	return = max(set(results), key=results.count))
+					id_counter+=1
+					if id_counter >= len(address_list):
+						id_counter = 0
+					it_counter+=1
+					print("{} {}".format(it_counter, id_counter))
+				return max(set(results), key=results.count)
 	
 if __name__ == "__main__":	
 	value = get_sound_data()
