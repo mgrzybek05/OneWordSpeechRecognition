@@ -4,14 +4,12 @@ import time
 from datetime import datetime
 
 address_list = [
-    '10.11.245.212',
-    '10.11.170.148',
-    '10.11.246.184',
+    '10.16.9.113',
 ]
 
 if __name__ == "__main__":
     server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    server.bind(("10.11.147.132", 32500))
+    server.bind(("10.11.238.30", 32500))
     server.listen(5)
 
     id_counter = 0

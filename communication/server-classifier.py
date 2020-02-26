@@ -4,14 +4,12 @@ import time
 from datetime import datetime
 
 address_list = [
-    '10.11.245.212',
-    '10.11.170.148',
-    '10.11.246.184',
+    "10.16.9.113"
 ]
 
 if __name__ == "__main__":
     server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    server.bind(("10.11.147.132", 32500))
+    server.bind(("10.11.234.70", 32500))
     server.listen(5)
 
     id_counter = 0
@@ -32,13 +30,15 @@ if __name__ == "__main__":
                 while True:
                     recieve = connection.recv(2048)
                     size_count += len(recieve)
-                    if not recieve or recieve == "" or size_count > 312000:
+                    if not recieve or recieve == "" or size_count > 32000:
                         f.write(recieve)
                         break
                     f.write(recieve)
             end = datetime.now().timestamp()
             time_file.write("End {} {}\n".format(address[0], end))
-            os.system("python3 ../use.py".format(file_name))
+            os.chdir("../")
+            os.system("python3 use.py".format(file_name))
+            os.chdir("communication")
             connection.send("Done".encode('utf-8'))
             connection.close()
             print("Done")
