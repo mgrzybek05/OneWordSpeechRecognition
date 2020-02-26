@@ -10,7 +10,7 @@ def send_to_server(results):
 		try:
 			print("Connecting to server")
 			client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-			client.connect(("10.11.238.30", 32500))
+			client.connect(("10.11.239.102", 32500))
 			sent = client.send(str(results).encode())
 			time.sleep(1)	
 			from_server = client.recv(1024)
