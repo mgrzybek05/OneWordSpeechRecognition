@@ -17,9 +17,9 @@ if __name__ == "__main__":
 				print("Connecting to server")
 				client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 				# Fog
-				client.connect(("10.11.239.102", 32500))
+				client.connect(("19.16.9.113", 32500))
 				# Server
-				#client.connect(("10.11.147.132", 32500))
+				#client.connect(("10.11.239.102", 32500))
 				connected = True
 			except Exception as e:
 				time.sleep(2)
