@@ -21,6 +21,7 @@ def send_to_server(results):
 			connected = False
 
 if __name__ == "__main__":
-	value = 1
-	send_to_server(value)
+	for i in range(10):
+		value = 1
+		send_to_server(value)
 	
