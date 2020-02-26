@@ -11,14 +11,19 @@ if __name__ == "__main__":
 		sound_data = sound_file.read()
 		
 		connected = False
+		time.sleep(10) # Simulate 10 seconds of data collection
 		while connected == False:
 			try:
 				print("Connecting to server")
 				client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-				client.connect(("10.11.147.132", 32500))
+				# Fog
+				client.connect(("10.16.9.113", 32500))
+				# Server
+				#client.connect(("10.11.147.132", 32500))
 				connected = True
 			except Exception as e:
 				time.sleep(2)
+				client.close()
 				connected = False
 		
 		while sound_data:
@@ -31,7 +36,6 @@ if __name__ == "__main__":
 			except Exception as e:
 				time.sleep(2)  
 				break
-		time.sleep(2)	
-		from_server = client.recv(1024)
+		time.sleep(2)
 
 	
