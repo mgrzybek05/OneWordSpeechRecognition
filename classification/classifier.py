@@ -4,6 +4,7 @@ from numpy import array, asarray, shape
 from dataset import DatasetGenerator
 
 def classify_sound(model, sound_file):
+	model = load_model(model)
 	LABELS = 'no yes'.split()
 	dsGen = DatasetGenerator(label_set=LABELS) 
 	x = array(dsGen.process_wav_file(sound_file))
