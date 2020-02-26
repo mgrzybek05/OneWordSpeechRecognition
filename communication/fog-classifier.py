@@ -9,7 +9,7 @@ from classifier import classify_sound
 
 address_list = [
     '10.11.155.159',
-	'10.11.207.176',
+	'10.11.201.222',
 	'10.11.216.196'
 ]
 
@@ -21,7 +21,7 @@ def send_to_server(results):
 		try:
 			print("Connecting to server")
 			client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-			client.connect(("10.11.238.30", 32500))
+			client.connect(("10.16.9.113", 32500))
 			sent = client.send(str(results).encode())
 			time.sleep(1)	
 			from_server = client.recv(1024)
@@ -35,11 +35,13 @@ def send_to_server(results):
 def get_sound_data():
 	server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)	
-	server.bind(("10.16.9.113", 32500))
+	server.bind(("10.11.239.102", 32500))
 	server.listen(3)
 
 	id_counter = 0
 	results = [ 0, 0, 0 ]
+	time_file = open("latency_server.txt", "a+")
+
 	while True:
 
 		connection, address = server.accept()
@@ -48,6 +50,8 @@ def get_sound_data():
 			connection.close()
 			print("Skip")
 		else:
+			start = datetime.now().timestamp()
+            time_file.write("Start {} {}\n".format(address[0], start))
 			file_name = "sound_from_client.wav"
 			size_count = 0
 			with open(file_name, "wb") as f:
@@ -58,6 +62,8 @@ def get_sound_data():
 						f.write(recieve)
 						break
 					f.write(recieve)
+			end = datetime.now().timestamp()
+            time_file.write("End {} {}\n".format(address[0], end))
 			results[id_counter] = classify_sound('../classification/training_models/RPM.h5','sound_from_client.wav')
 			connection.send("Done".encode('utf-8'))
 			connection.close()
@@ -72,10 +78,10 @@ def get_sound_data():
 	return max(set(results), key=results.count)
 
 if __name__ == "__main__":
-	time_file = open("runtime-fog.txt", "a+")
+	#time_file = open("runtime-non.txt", "a+")
 	start = datetime.now().timestamp()
-	time_file.write("Start {}\n".format(start))
+	#time_file.write("Start {}\n".format(start))
 	value = get_sound_data()
 	send_to_server(value)
 	end = datetime.now().timestamp()
-	time_file.write("End {}\n".format(end))
+	#time_file.write("End {}\n".format(end))
