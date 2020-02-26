@@ -36,8 +36,7 @@ def get_sound_data():
 	server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)	
 	server.bind(("10.16.9.113", 32500))
-	server.listen(5)
-
+	server.listen(3)
 
 	id_counter = 0
 	results = [ 0, 0, 0 ]
@@ -74,11 +73,9 @@ def get_sound_data():
 
 if __name__ == "__main__":
 	time_file = open("runtime-fog.txt", "a+")
-
-	for i in range(30):	
-		start = datetime.now().timestamp()
-		time_file.write("Start {}\n".format(start))
-		value = get_sound_data()
-		send_to_server(value)
-		end = datetime.now().timestamp()
-		time_file.write("End {}\n".format(end))
+	start = datetime.now().timestamp()
+	time_file.write("Start {}\n".format(start))
+	value = get_sound_data()
+	send_to_server(value)
+	end = datetime.now().timestamp()
+	time_file.write("End {}\n".format(end))
