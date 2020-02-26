@@ -11,7 +11,7 @@ if __name__ == "__main__":
 		sound_data = sound_file.read()
 		
 		connected = False
-		#time.sleep(5) # Simulate 10 seconds of data collection
+		time.sleep(8) # Simulate 10 seconds of data collection
 		while connected == False:
 			try:
 				print("Connecting to server")
