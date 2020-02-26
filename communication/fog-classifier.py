@@ -21,7 +21,7 @@ def send_to_server(results):
 		try:
 			print("Connecting to server")
 			client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-			client.connect(("10.16.9.113", 32500))
+			client.connect(("10.11.239.102", 32500))
 			sent = client.send(str(results).encode())
 			time.sleep(1)	
 			from_server = client.recv(1024)
@@ -37,7 +37,7 @@ def get_sound_data():
 	server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)	
 	server.bind(("10.11.239.102", 32500))
 	server.listen(3)
-
+		
 	id_counter = 0
 	results = [ 0, 0, 0 ]
 	time_file = open("latency_server.txt", "a+")
@@ -80,8 +80,9 @@ def get_sound_data():
 if __name__ == "__main__":
 	#time_file = open("runtime-non.txt", "a+")
 	start = datetime.now().timestamp()
-	#time_file.write("Start {}\n".format(start))
-	value = get_sound_data()
+	time_file.write("Start {}\n".format(start))
+	#value = get_sound_data()
+	value = 1
 	send_to_server(value)
 	end = datetime.now().timestamp()
 	#time_file.write("End {}\n".format(end))
