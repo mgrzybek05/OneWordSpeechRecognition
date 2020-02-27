@@ -19,7 +19,7 @@ if __name__ == "__main__":
 				# Fog
 				#client.connect(("10.16.9.113", 32500))
 				# Server
-				client.connect(("10.11.239.102", 32500))
+				client.connect(("10.11.235.35", 32500))
 				connected = True
 			except Exception as e:
 				time.sleep(2)
