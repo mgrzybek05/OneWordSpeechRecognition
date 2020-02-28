@@ -10,8 +10,8 @@ if __name__ == "__main__":
 	limit = 20
 	while exit_client == False:	
 		file_name = "testsound.wav"
-		latency_name = "non_lat_1a.txt"
-		ip_address = "10.11.155.159"
+		latency_name = "non_lat_1c.txt"
+		ip_address = "10.11.236.131"
 	
 		sound_file = open(file_name, "rb")
 		latency_file = open(latency_name, "a+")
@@ -43,7 +43,7 @@ if __name__ == "__main__":
 						skip = 1  
 						break
 				
-				if skip = 0:
+				if skip == 0:
 					message = client.recv(1024)
 					if message == b'Done':
 						end = datetime.now().timestamp()
