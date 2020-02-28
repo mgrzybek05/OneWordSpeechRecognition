@@ -9,8 +9,8 @@ if __name__ == "__main__":
 	limit = 20
 	while exit_client == False:	
 		file_name = "testsound.wav"
-		latency_name = "non_lat_1a.txt"
-		ip_address = "10.11.155.159"
+		latency_name = "non_lat_2f.txt"
+		ip_address = "10.11.220.109"
 	
 		sound_file = open(file_name, "rb")
 		latency_file = open(latency_name, "a+")
@@ -27,7 +27,6 @@ if __name__ == "__main__":
 				#client.connect(("10.16.9.113", 32500))
 				# Server
 				client.connect(("10.11.232.95", 32500))
-				latency_file.write("Start {} {}\n".format(ip_address, start))
 				
 				while sound_data:
 					data = sound_data[:2048]
@@ -39,11 +38,13 @@ if __name__ == "__main__":
 					except Exception as e:
 						time.sleep(2)  
 						break
-
-				end = datetime.now().timestamp()
-				latency_file.write("End {} {}\n".format(ip_address, end))
+				message = client.recv(1024)
+				if message == b'Done':
+					end = datetime.now().timestamp()
+					latency_file.write("Start {} {}\n".format(ip_address, start))
+					latency_file.write("End {} {}\n".format(ip_address, end))
+					done = True
 				time.sleep(2)
-				done = True
 			except Exception as e:
 				print(e)
 				time.sleep(2)
