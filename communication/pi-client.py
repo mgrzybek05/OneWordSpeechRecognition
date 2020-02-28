@@ -7,6 +7,7 @@ if __name__ == "__main__":
 	exit_client = False
 	it_counter = 0
 	limit = 20
+	skip = 0
 	while exit_client == False:	
 		file_name = "testsound.wav"
 		latency_name = "non_lat_1a.txt"
@@ -19,6 +20,7 @@ if __name__ == "__main__":
 		done = False
 		while done == False:
 			try:
+				skip = 0
 				time.sleep(1) # Simulate 10 seconds of data collection
 				client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 				print("Connecting to server")
@@ -37,12 +39,14 @@ if __name__ == "__main__":
 						sound_data = sound_data[sent:]
 					except Exception as e:
 						print(e)
+						skip = 1
 						time.sleep(2)
 						break
-				end = datetime.now().timestamp()
-				latency_file.write("Start {} {}\n".format(ip_address, start))
-				latency_file.write("End {} {}\n".format(ip_address, end))
-				done = True
+				if skip == 0:
+					end = datetime.now().timestamp()
+					latency_file.write("Start {} {}\n".format(ip_address, start))
+					latency_file.write("End {} {}\n".format(ip_address, end))
+					done = True
 				time.sleep(2)
 			except Exception as e:
 				print(e)
