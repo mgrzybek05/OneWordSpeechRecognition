@@ -164,9 +164,34 @@ if __name__ == "__main__":
 		temp_latencies = temp_latencies[10:39]
 		fog3_latencies = fog3_latencies + temp_latencies
 
+	avg_non1 = mean(non1_latencies)*1000
+	avg_non2 = mean(non2_latencies)*1000
+	avg_non3 = mean(non3_latencies)*1000
+	avg_fog1 = mean(fog1_latencies)*1000
+	avg_fog2 = mean(fog2_latencies)*1000
+	avg_fog3 = mean(fog3_latencies)*1000
+
 	print(mean(non1_latencies))
 	print(mean(non2_latencies))	
 	print(mean(non3_latencies))
 	print(mean(fog1_latencies))	
 	print(mean(fog2_latencies))	
 	print(mean(fog3_latencies))	
+
+	values = [avg_non1, avg_non2, avg_non3, avg_fog1, avg_fog2, avg_fog3]
+	plt.grid(b=True, which='major', color='gray', linestyle=':')
+	plt.bar([0.875,1.875,2.875], [avg_non1, avg_non2, avg_non3], width=0.25, label="Cloud Setup", align="center", color="green")
+	plt.bar([1.125,2.125,3.125], [avg_fog1, avg_fog2, avg_fog3], width=0.25, label="Fog Setup", align="center", color="red")
+	
+	plt.text(0.75, 16, str(15.91), color='black', fontweight='bold', ha='left', va='baseline')
+	plt.text(1.75, 15.7, str(15.66), color='black', fontweight='bold', ha='left', va='baseline')
+	plt.text(2.75, 20.1, str(20.02), color='black', fontweight='bold', ha='left', va='baseline')	
+
+	plt.text(1.025, 0.16, str(0.15), color='black', fontweight='bold', ha='left', va='baseline')
+	plt.text(2.025, 0.16, str(0.15), color='black', fontweight='bold', ha='left', va='baseline')
+	plt.text(3.025, 0.24, str(0.16), color='black', fontweight='bold', ha='left', va='baseline')	
+	plt.legend(loc='best')
+	plt.xlabel('Number of Rooms')
+	plt.ylabel('Latency (ms)')
+	plt.xticks([1,2,3])
+	plt.savefig("latency.png")
