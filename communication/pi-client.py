@@ -10,8 +10,8 @@ if __name__ == "__main__":
 	skip = 0
 	while exit_client == False:	
 		file_name = "testsound.wav"
-		latency_name = "non_lat_1c.txt"
-		ip_address = "10.11.236.131"
+		latency_name = "non_lat_1b.txt"
+		ip_address = "10.11.182.104"
 	
 		sound_file = open(file_name, "rb")
 		latency_file = open(latency_name, "a+")
