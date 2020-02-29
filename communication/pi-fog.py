@@ -6,8 +6,8 @@ from datetime import datetime
 
 def send_to_server(results):
 	connected = False
-	latency_name = "fog_lat_3b.txt"
-	ip_address = "10.11.182.104"
+	latency_name = "fog_lat_3a.txt"
+	ip_address = "10.11.155.159"
 	
 	latency_file = open(latency_name, "a+")
 	while connected == False:
