@@ -6,12 +6,13 @@ from datetime import datetime
 
 def send_to_server(results):
 	connected = False
-	latency_name = "fog_lat_1a.txt"
-	ip_address = "10.11.155.159"
+	latency_name = "fog_lat_3a.txt"
+	ip_address = "10.11.152.161"
 	
 	latency_file = open(latency_name, "a+")
 	while connected == False:
 		try:
+			time.sleep(2)
 			start = datetime.now().timestamp()
 			print("Connecting to server")
 			client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

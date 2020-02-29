@@ -6,12 +6,12 @@ from datetime import datetime
 if __name__ == "__main__":	
 	exit_client = False
 	it_counter = 0
-	limit = 20
+	limit = 60
 	skip = 0
 	while exit_client == False:	
 		file_name = "testsound.wav"
-		latency_name = "non_lat_1a.txt"
-		ip_address = "10.11.155.159"
+		latency_name = "non_lat_1c.txt"
+		ip_address = "10.11.236.131"
 	
 		sound_file = open(file_name, "rb")
 		latency_file = open(latency_name, "a+")
