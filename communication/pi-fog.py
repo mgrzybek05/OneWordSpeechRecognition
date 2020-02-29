@@ -17,13 +17,12 @@ def send_to_server(results):
 			client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 			client.connect(("10.11.232.95", 32500))
 			sent = client.send(str(results).encode())
-			from_server = client.recv(1024)
-			if from_server == b'Done':
-				connected = True
-				end = datetime.now().timestamp()
-				latency_file.write("Start {} {}\n".format(ip_address, start))
-				latency_file.write("End {} {}\n".format(ip_address, end))				
+			connected = True
+			end = datetime.now().timestamp()
+			latency_file.write("Start {} {}\n".format(ip_address, start))
+			latency_file.write("End {} {}\n".format(ip_address, end))				
 		except Exception as e:
+			print(e)
 			time.sleep(1)
 			connected = False
 
@@ -31,4 +30,4 @@ if __name__ == "__main__":
 	for i in range(60):
 		value = 1
 		send_to_server(value)
-					
+		print(i)	
