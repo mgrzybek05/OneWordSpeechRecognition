@@ -12,7 +12,7 @@ def send_to_server(results):
 	latency_file = open(latency_name, "a+")
 	while connected == False:
 		try:
-			time.sleep(2)
+			time.sleep(4)
 			print("Connecting to server")
 			client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 			client.connect(("10.11.232.95", 32500))
