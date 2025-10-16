@@ -24,7 +24,7 @@ dsGen = DatasetGenerator(label_set=LABELS)
 df = dsGen.load_data(DIR)
 
 dsGen.apply_train_test_split(test_size=0.3, random_state=2018)
-dsGen.apply_train_val_split(val_size=0.2, random_state=2018)
+dsGen.apply_train_val_split(val_size=0.3, random_state=2018)
 
 #==============================================================================
 # Train
@@ -34,7 +34,7 @@ model.compile(optimizer='Adam', loss='categorical_crossentropy', metrics=['acc']
 
 callbacks = [EarlyStopping(monitor='val_acc', patience=4, verbose=1, mode='max')]
 
-history = model.fit_generator(generator=dsGen.generator(BATCH, mode='train'),
+history = model.fit(dsGen.generator(BATCH, mode='train'),
                               steps_per_epoch=int(np.ceil(len(dsGen.df_train)/BATCH)),
                               epochs=EPOCHS,
                               verbose=1,
@@ -42,18 +42,17 @@ history = model.fit_generator(generator=dsGen.generator(BATCH, mode='train'),
                               validation_data=dsGen.generator(BATCH, mode='val'),
                               validation_steps=int(np.ceil(len(dsGen.df_val)/BATCH)))
 
+
 #==============================================================================
 # Predict
 #==============================================================================
-y_pred_proba = model.predict_generator(dsGen.generator(BATCH, mode='test'), 
-                                     int(np.ceil(len(dsGen.df_test)/BATCH)), 
-                                     verbose=1)
-y_pred = np.argmax(y_pred_proba, axis=1)
+score = model.evaluate(dsGen.generator(BATCH, mode='val'), steps=int(np.ceil(len(dsGen.df_val)/BATCH)))
+#y_pred = np.argmax(y_pred_proba, axis=1)
 
-y_true = dsGen.df_test['label_id'].values
+#y_true = dsGen.df_test['label_id'].values
 
-acc_score = accuracy_score(y_true, y_pred)
+#acc_score = accuracy_score(y_true, y_pred)
 
-model.save('RPM.h5')
+model.save('RPM.keras')
 
-print(acc_score)
+print(score)

@@ -1,2 +1,5 @@
-input
+*/input
 __pycache__
+env/
+*/*.h5
+*/*.keras
