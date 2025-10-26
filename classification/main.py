@@ -12,7 +12,7 @@ INPUT_SHAPE = (177,98,1)
 BATCH = 32
 EPOCHS = 15
 
-LABELS = 'yes no'.split()
+LABELS = 'down go left no right stop up yes'.split()
 NUM_CLASSES = len(LABELS)
 
 #==============================================================================
@@ -47,11 +47,6 @@ history = model.fit(dsGen.generator(BATCH, mode='train'),
 # Predict
 #==============================================================================
 score = model.evaluate(dsGen.generator(BATCH, mode='val'), steps=int(np.ceil(len(dsGen.df_val)/BATCH)))
-#y_pred = np.argmax(y_pred_proba, axis=1)
-
-#y_true = dsGen.df_test['label_id'].values
-
-#acc_score = accuracy_score(y_true, y_pred)
 
 model.save('RPM.keras')
 

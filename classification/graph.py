@@ -2,70 +2,56 @@ from matplotlib import pyplot
 
 
 acc = [
-    0.8657,
-    0.9200,
+    0.5946,
+    0.8146,
+    0.8813,
+    0.9010,
     0.9357,
-    0.9598,
-    0.9632,
-    0.9621,
-    0.9695,
-    0.9803,
-    0.9740,
-    0.9855,
-    0.9818,
-    0.9870
+    0.9414,
+    0.9520,
+    0.9576,
 ]
 
 val_acc = [
-    0.6997,
-    0.9339,
-    0.8964,
-    0.9039,
-    0.9474,
-    0.9535,
-    0.9625,
-    0.9790,
-    0.9655,
-    0.8664,
-    0.9655,
-    0.9625
+    0.4237,
+    0.7420,
+    0.6705,
+    0.8754,
+    0.8298,
+    0.7193,
+    0.8725,
+    0.8396,
+    0.8402,
 ]
 
 loss = [
-    0.3422,
-    0.1903,
-    0.1698,
-    0.1144,
-    0.0924,
-    0.0999,
-    0.0827,
-    0.0574,
-    0.0749,
-    0.0472,
-    0.0536,
-    0.0413
+    1.1702,
+    0.5644,
+    0.3694,
+    0.3024,
+    0.1965,
+    0.1780,
+    0.1431,
+    0.1340
 ]
 
 val_loss = [
-    0.6776,
-    0.1639,
-    0.2589,
-    0.2349,
-    0.1122,
-    0.1332,
-    0.1156,
-    0.0784,
-    0.0942,
-    0.3375,
-    0.0904,
-    0.0860
+    1.8381,
+    0.7161,
+    1.0064,
+    0.3675,
+    0.5551,
+    0.8908,
+    0.3874,
+    0.4867,
+    0.4949
 ]
 
 
 
 
-pyplot.plot(range(1,13), acc, label='Training Accuracy', color='r')
-pyplot.plot(range(1,13), val_acc, label='Validation Accuracy', color='g')
+pyplot.plot(range(1,9), acc, label='Training Accuracy', color='r')
+pyplot.plot(range(1,10), val_acc, label='Validation Accuracy', color='g')
 pyplot.legend(loc='best')
 pyplot.ylabel('Accuracy')
 pyplot.xlabel('Epochs')
@@ -74,8 +60,8 @@ pyplot.savefig('accuracy.png')
 pyplot.close()
 
 
-pyplot.plot(range(1,13), loss, label='Training Loss', color='r')
-pyplot.plot(range(1,13), val_loss, label='Validation Loss', color='g')
+pyplot.plot(range(1,9), loss, label='Training Loss', color='r')
+pyplot.plot(range(1,10), val_loss, label='Validation Loss', color='g')
 pyplot.legend(loc='best')
 pyplot.ylabel('Loss')
 pyplot.xlabel('Epochs')

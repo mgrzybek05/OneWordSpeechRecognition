@@ -31,8 +31,16 @@ class DatasetGenerator():
 
         # Get all paths inside DIR that ends with wav
         wav_files = glob(os.path.join(DIR, '*/*wav'))
-        wav_files = [x.split(sep='/')[1] + '/' + x.split(sep='/')[2] for x in wav_files]
-        
+
+        wav_files = [
+            '/'.join(os.path.normpath(x).split(os.sep)[1:3])
+            for x in wav_files
+            if len(os.path.normpath(x).split(os.sep)) >= 3
+        ]
+
+
+        #wav_files = [x.split(sep='/')[1] + '/' + x.split(sep='/')[2] for x in wav_files]
+
         # Loop over files to get samples
         data = []
         for e in wav_files:
