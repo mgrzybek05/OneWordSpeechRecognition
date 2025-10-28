@@ -1,9 +1,12 @@
 from models import deep, deep_cnn
 
+from custom_callback import TimeHistory, InfoCallback
+
 import numpy as np
 from sklearn.metrics import accuracy_score
 from keras.callbacks import EarlyStopping
 
+import pandas as pd
 from dataset import DatasetGenerator
 
 DIR = 'input' # unzipped train and test data
@@ -32,7 +35,9 @@ dsGen.apply_train_val_split(val_size=0.3, random_state=2018)
 model = deep_cnn(INPUT_SHAPE, NUM_CLASSES)
 model.compile(optimizer='Adam', loss='categorical_crossentropy', metrics=['acc'])
 
-callbacks = [EarlyStopping(monitor='val_acc', patience=4, verbose=1, mode='max')]
+timer = TimeHistory()
+info = InfoCallback()
+callbacks = [EarlyStopping(monitor='val_acc', patience=4, verbose=1, mode='max'), timer, info]
 
 history = model.fit(dsGen.generator(BATCH, mode='train'),
                               steps_per_epoch=int(np.ceil(len(dsGen.df_train)/BATCH)),
@@ -41,6 +46,12 @@ history = model.fit(dsGen.generator(BATCH, mode='train'),
                               callbacks=callbacks,
                               validation_data=dsGen.generator(BATCH, mode='val'),
                               validation_steps=int(np.ceil(len(dsGen.df_val)/BATCH)))
+
+history_df = pd.DataFrame(history.history)
+history_df["batches_per_epoch"] = info.batch_counts
+#history_df["steps_per_epoch"] = info.steps_counts
+#history_df["samples_per_epoch"] = info.sample_counts
+history_df["epoch_time_sec"] = timer.times
 
 
 #==============================================================================
@@ -51,3 +62,6 @@ score = model.evaluate(dsGen.generator(BATCH, mode='val'), steps=int(np.ceil(len
 model.save('RPM.keras')
 
 print(score)
+print(history_df)
+history_df.to_csv("training_history.csv", index=False)
+print("Total time:", timer.total_time)
