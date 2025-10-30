@@ -5,6 +5,7 @@ from dataset import DatasetGenerator
 import random
 from keras.utils import to_categorical
 import time
+import pandas as pd
 
 
 MODEL_DIR = 'model_1.keras'
@@ -18,11 +19,29 @@ def main():
     df = dsGen.load_data(DIR)
     num_utterances = len(list(range(df.shape[0])))
 
+    print(df)
+
+    time.sleep(2) # sleep for 5 seconds
+
     start_time = time.time()
+    
+    predictions = np.argmax(model.predict(batch_gen(dsGen, BATCH), steps=int(np.ceil(len(dsGen.df)/BATCH))), axis=1)
+    label_arr = np.array(LABELS)
+    predictions = label_arr[predictions]
+    
+    #print(predictions)
+    
     loss, accuracy = model.evaluate(batch_gen(dsGen, BATCH), steps=int(np.ceil(len(dsGen.df)/BATCH)))
     delay_ms = (time.time() - start_time)*1000
-  
+    
+    time.sleep(2) # sleep for 5 seconds
+    
+    df["prediction"] = predictions
+    
     print(f"Loss: {loss} \nAccuracy: {accuracy}\nItems: {num_utterances}\nDelay: {delay_ms}\nDelay Per: {delay_ms/num_utterances}")
+
+    print(df)
+    df.to_csv("dataframe.csv", index=False)
 
     return 0
 
