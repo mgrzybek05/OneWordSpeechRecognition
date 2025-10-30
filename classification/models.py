@@ -60,3 +60,4 @@ def deep_cnn(features_shape, num_classes, act='relu'):
     Model(inputs=x, outputs=o).summary()
     
     return Model(inputs=x, outputs=o)
+

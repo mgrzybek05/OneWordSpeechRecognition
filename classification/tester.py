@@ -7,7 +7,7 @@ from keras.utils import to_categorical
 import time
 
 
-MODEL_DIR = 'RPM.keras'
+MODEL_DIR = 'model_1.keras'
 DIR = 'testing_set'
 BATCH = 32
 

@@ -5,6 +5,8 @@ import random
     
 from glob import glob
 
+from matplotlib import pyplot as plt
+
 from scipy.io import wavfile
 from scipy.signal import stft
 
@@ -105,8 +107,24 @@ class DatasetGenerator():
             freqs = freqs[freqs <= threshold_freq]
         # Log spectrogram
         amp = np.log(np.abs(spec)+eps)
-    
-        return np.expand_dims(amp, axis=2) 
+
+        # Plot spectrogram
+        # need to make time axis in seconds
+        cep = np.expand_dims(amp, axis=2)
+        num_frames = cep.shape[0]
+        time_axis = np.linspace(0, len(wav)/self.sample_rate, num_frames)
+        plt.figure(figsize=(5, 0.65*5))
+        plt.imshow(cep, aspect='auto', origin='lower', extent=[time_axis[0], time_axis[-1], freqs[0], freqs[-1]])
+        plt.colorbar()
+        plt.set_cmap('jet')
+        plt.xticks
+        plt.xlabel('Time (s)')
+        plt.ylabel('Frequency (Hz)')
+        plt.tight_layout()
+        plt.savefig('log_spectrogram.pdf', bbox_inches='tight')
+        plt.show()
+
+        return np.expand_dims(amp, axis=2)
 
     def generator(self, batch_size, mode):
         while True:
