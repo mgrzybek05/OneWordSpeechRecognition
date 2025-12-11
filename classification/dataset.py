@@ -14,6 +14,7 @@ from sklearn.model_selection import train_test_split
 
 from keras.utils import to_categorical
 
+
 class DatasetGenerator():
     def __init__(self, label_set, 
                  sample_rate=16000):
@@ -113,15 +114,20 @@ class DatasetGenerator():
         cep = np.expand_dims(amp, axis=2)
         num_frames = cep.shape[0]
         time_axis = np.linspace(0, len(wav)/self.sample_rate, num_frames)
-        plt.figure(figsize=(5, 0.65*5))
+        
+
+        plt.rcParams.update({'font.size': 8}) # Set default font size to 12
+        plt.rcParams['xtick.direction'] = 'in'
+        plt.rcParams['ytick.direction'] = 'in'
+
+        plt.figure(figsize=(3.5, 2.5), tight_layout=True)
         plt.imshow(cep, aspect='auto', origin='lower', extent=[time_axis[0], time_axis[-1], freqs[0], freqs[-1]])
         plt.colorbar()
         plt.set_cmap('jet')
         plt.xticks
         plt.xlabel('Time (s)')
         plt.ylabel('Frequency (Hz)')
-        plt.tight_layout()
-        plt.savefig('log_spectrogram.pdf', bbox_inches='tight')
+        plt.savefig('log_spectrogram.pdf', bbox_inches='tight', dpi=300)
         plt.show()
 
         return np.expand_dims(amp, axis=2)

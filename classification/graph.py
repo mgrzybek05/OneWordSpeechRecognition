@@ -1,5 +1,10 @@
-from matplotlib import pyplot
+import matplotlib.pyplot as plt
 
+plt.rcParams.update({'font.size': 8}) # Set default font size to 12
+plt.rcParams['xtick.direction'] = 'in'
+plt.rcParams['ytick.direction'] = 'in'
+plt.rcParams['xtick.top'] = True
+plt.rcParams['ytick.right'] = True
 
 acc = [
     0.5968,
@@ -77,22 +82,26 @@ val_loss = [
 
 
 
+plt.figure(figsize=(3.5, 2.8), tight_layout=True)
+plt.plot(range(1,16), acc, label='Training Accuracy', color='r')
+plt.plot(range(1,17), val_acc, label='Validation Accuracy', color='g')
+plt.legend(loc='best')
+plt.ylabel('Accuracy')
+plt.xlabel('Epochs')
+plt.xticks(list(range(0,15))[::5])
+plt.ylim(top=1)
+plt.grid(True)
+plt.savefig('cnn_accuracy.pdf', bbox_inches='tight')
+plt.close()
 
-pyplot.plot(range(1,16), acc, label='Training Accuracy', color='r')
-pyplot.plot(range(1,17), val_acc, label='Validation Accuracy', color='g')
-pyplot.legend(loc='best')
-pyplot.ylabel('Accuracy')
-pyplot.xlabel('Epochs')
-pyplot.xticks(list(range(0,15))[::5])
-pyplot.savefig('accuracy.png')
-pyplot.close()
-
-
-pyplot.plot(range(1,16), loss, label='Training Loss', color='r')
-pyplot.plot(range(1,17), val_loss, label='Validation Loss', color='g')
-pyplot.legend(loc='best')
-pyplot.ylabel('Loss')
-pyplot.xlabel('Epochs')
-pyplot.xticks(list(range(0,15))[::5])
-pyplot.savefig('loss.png')
-pyplot.close()
+plt.figure(figsize=(3.5, 2.8), tight_layout=True)
+plt.plot(range(1,16), loss, label='Training Loss', color='r')
+plt.plot(range(1,17), val_loss, label='Validation Loss', color='g')
+plt.legend(loc='best')
+plt.ylabel('Loss')
+plt.xlabel('Epochs')
+plt.xticks(list(range(0,15))[::5])
+plt.ylim(0, 3.5)
+plt.grid(True)
+plt.savefig('cnn_loss.pdf', bbox_inches='tight')
+plt.close()
