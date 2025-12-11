@@ -29,6 +29,8 @@ df = dsGen.load_data(DIR)
 dsGen.apply_train_test_split(test_size=0.3, random_state=2018)
 dsGen.apply_train_val_split(val_size=0.3, random_state=2018)
 
+print(df)
+
 #==============================================================================
 # Train
 #==============================================================================              
@@ -37,7 +39,7 @@ model.compile(optimizer='Adam', loss='categorical_crossentropy', metrics=['acc']
 
 timer = TimeHistory()
 info = InfoCallback()
-callbacks = [EarlyStopping(monitor='val_acc', patience=4, verbose=1, mode='max'), timer, info]
+callbacks = [timer, info]
 
 history = model.fit(dsGen.generator(BATCH, mode='train'),
                               steps_per_epoch=int(np.ceil(len(dsGen.df_train)/BATCH)),
@@ -52,7 +54,6 @@ history_df["batches_per_epoch"] = info.batch_counts
 #history_df["steps_per_epoch"] = info.steps_counts
 #history_df["samples_per_epoch"] = info.sample_counts
 history_df["epoch_time_sec"] = timer.times
-
 
 #==============================================================================
 # Predict

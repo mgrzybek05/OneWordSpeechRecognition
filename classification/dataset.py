@@ -109,6 +109,7 @@ class DatasetGenerator():
         # Log spectrogram
         amp = np.log(np.abs(spec)+eps)
 
+        '''
         # Plot spectrogram
         # need to make time axis in seconds
         cep = np.expand_dims(amp, axis=2)
@@ -129,7 +130,8 @@ class DatasetGenerator():
         plt.ylabel('Frequency (Hz)')
         plt.savefig('log_spectrogram.pdf', bbox_inches='tight', dpi=300)
         plt.show()
-
+        '''
+    
         return np.expand_dims(amp, axis=2)
 
     def generator(self, batch_size, mode):
