@@ -1,0 +1,6 @@
+TODO LIST
+1. Create larger test set with 100 unique speakers
+	- from what i remember there are ~450 speakers that have 5 or more utterances per keyword
+	- need to select a set of 100 from these 500 speakers -> test set
+	- remove test set elements from dataset the CNN train an dev sets
+	- test everything again

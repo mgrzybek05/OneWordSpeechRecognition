@@ -8,42 +8,46 @@ import time
 import pandas as pd
 
 
-MODEL_DIR = 'model_1.keras'
+MODEL_DIR = 'model_3.keras'
 DIR = 'testing_set'
 BATCH = 32
+
 
 def main():
     model = load_model(MODEL_DIR)
     LABELS = 'down go left no right stop up yes'.split()
-    dsGen = DatasetGenerator(label_set=LABELS) 
+    dsGen = DatasetGenerator(label_set=LABELS)
     df = dsGen.load_data(DIR)
     num_utterances = len(list(range(df.shape[0])))
 
     print(df)
 
-    time.sleep(2) # sleep for 5 seconds
+    time.sleep(2)  # sleep for 5 seconds
 
     start_time = time.time()
-    
-    predictions = np.argmax(model.predict(batch_gen(dsGen, BATCH), steps=int(np.ceil(len(dsGen.df)/BATCH))), axis=1)
+
+    predictions = np.argmax(model.predict(
+        batch_gen(dsGen, BATCH), steps=int(np.ceil(len(dsGen.df)/BATCH))), axis=1)
     label_arr = np.array(LABELS)
     predictions = label_arr[predictions]
-    
-    #print(predictions)
-    
-    loss, accuracy = model.evaluate(batch_gen(dsGen, BATCH), steps=int(np.ceil(len(dsGen.df)/BATCH)))
+
+    # print(predictions)
+
+    loss, accuracy = model.evaluate(
+        batch_gen(dsGen, BATCH), steps=int(np.ceil(len(dsGen.df)/BATCH)))
     delay_ms = (time.time() - start_time)*1000
-    
-    time.sleep(2) # sleep for 5 seconds
-    
+
+    time.sleep(2)  # sleep for 5 seconds
+
     df["prediction"] = predictions
-    
+
     print(f"Loss: {loss} \nAccuracy: {accuracy}\nItems: {num_utterances}\nDelay: {delay_ms}\nDelay Per: {delay_ms/num_utterances}")
 
     print(df)
-    df.to_csv("dataframe.csv", index=False)
+    df.to_csv("dataframe_new.csv", index=False)
 
     return 0
+
 
 def batch_gen(dsGen, batch_size):
     while True:
@@ -62,9 +66,9 @@ def batch_gen(dsGen, batch_size):
                 y_batch.append(df.label_id.values[i])
             X_batch = np.array(X_batch)
 
-            y_batch = to_categorical(y_batch, num_classes = len(dsGen.label_set))
+            y_batch = to_categorical(y_batch, num_classes=len(dsGen.label_set))
             yield (X_batch, y_batch)
- 
+
 
 if __name__ == '__main__':
     main()
