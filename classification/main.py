@@ -1,7 +1,5 @@
 from models import deep, deep_cnn
 
-from custom_callback import TimeHistory, InfoCallback
-
 import numpy as np
 from sklearn.metrics import accuracy_score
 from keras.callbacks import EarlyStopping
@@ -9,7 +7,8 @@ from keras.callbacks import EarlyStopping
 import pandas as pd
 from dataset import DatasetGenerator
 
-DIR = 'input' # unzipped train and test data
+DIR = 'google_speech_commands' # unzipped train and test data
+TEST_SET = 'test_set_X_y.csv' # csv with test set
 
 INPUT_SHAPE = (177,98,1)
 BATCH = 32
@@ -24,12 +23,14 @@ NUM_CLASSES = len(LABELS)
 dsGen = DatasetGenerator(label_set=LABELS) 
 # Load DataFrame with paths/labels for training and validation data 
 # and paths for testing data 
-df = dsGen.load_data(DIR)
+df = dsGen.load_data(DIR, 37)
+df_test = dsGen.load_test_set(DIR, TEST_SET, 37)
+print(df.head())
+print(df_test.head())
 
-dsGen.apply_train_test_split(test_size=0.3, random_state=2018)
-dsGen.apply_train_val_split(val_size=0.3, random_state=2018)
+#dsGen.apply_train_test_split(test_size=0.3, random_state=2018)
+dsGen.apply_train_val_split(val_size=0.15, random_state=37)
 
-print(df)
 
 #==============================================================================
 # Train
@@ -37,32 +38,34 @@ print(df)
 model = deep_cnn(INPUT_SHAPE, NUM_CLASSES)
 model.compile(optimizer='Adam', loss='categorical_crossentropy', metrics=['acc'])
 
-timer = TimeHistory()
-info = InfoCallback()
-callbacks = [timer, info]
-
-history = model.fit(dsGen.generator(BATCH, mode='train'),
-                              steps_per_epoch=int(np.ceil(len(dsGen.df_train)/BATCH)),
-                              epochs=EPOCHS,
-                              verbose=1,
-                              callbacks=callbacks,
-                              validation_data=dsGen.generator(BATCH, mode='val'),
-                              validation_steps=int(np.ceil(len(dsGen.df_val)/BATCH)))
+early_stopper = EarlyStopping(
+		monitor='val_loss',
+		min_delta=0.001,
+		patience=10,
+		verbose=1,
+		mode='min',
+		restore_best_weights=True
+)
+history = model.fit(
+			dsGen.generator(BATCH, mode='train'),
+			steps_per_epoch=int(np.ceil(len(dsGen.df_train)/BATCH)),
+			epochs=EPOCHS,
+			verbose=1,
+			validation_data=dsGen.generator(BATCH, mode='val'),
+			validation_steps=int(np.ceil(len(dsGen.df_val)/BATCH)),
+			callbacks=[early_stopper]
+			)
 
 history_df = pd.DataFrame(history.history)
-history_df["batches_per_epoch"] = info.batch_counts
-#history_df["steps_per_epoch"] = info.steps_counts
-#history_df["samples_per_epoch"] = info.sample_counts
-history_df["epoch_time_sec"] = timer.times
 
 #==============================================================================
 # Predict
 #==============================================================================
-score = model.evaluate(dsGen.generator(BATCH, mode='val'), steps=int(np.ceil(len(dsGen.df_val)/BATCH)))
 
-model.save('RPM.keras')
+score = model.evaluate(dsGen.generator(BATCH, mode='test'), steps=int(np.ceil(len(dsGen.df_test)/BATCH)))
+
+model.save('NEW_TEST_DATASET_model.keras')
 
 print(score)
 print(history_df)
-history_df.to_csv("training_history.csv", index=False)
-print("Total time:", timer.total_time)
+history_df.to_csv("NEW_TEST_DATASET_training_history.csv", index=False)

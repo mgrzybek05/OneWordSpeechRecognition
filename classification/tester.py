@@ -8,8 +8,9 @@ import time
 import pandas as pd
 
 
-MODEL_DIR = 'model_3.keras'
-DIR = 'testing_set'
+MODEL_DIR = 'NEW_TEST_DATASET_model.keras'
+DIR = 'google_speech_commands' # unzipped train and test data
+TEST_SET = 'test_set_X_y.csv' # csv with test set
 BATCH = 32
 
 
@@ -17,24 +18,25 @@ def main():
     model = load_model(MODEL_DIR)
     LABELS = 'down go left no right stop up yes'.split()
     dsGen = DatasetGenerator(label_set=LABELS)
-    df = dsGen.load_data(DIR)
+    df_ = dsGen.load_data(DIR, 37)
+    df = dsGen.load_test_set(DIR, TEST_SET, 37)
     num_utterances = len(list(range(df.shape[0])))
 
-    print(df)
+    #print(df)
 
     time.sleep(2)  # sleep for 5 seconds
 
     start_time = time.time()
 
     predictions = np.argmax(model.predict(
-        batch_gen(dsGen, BATCH), steps=int(np.ceil(len(dsGen.df)/BATCH))), axis=1)
+        batch_gen(df, BATCH, dsGen), steps=int(np.ceil(len(df)/BATCH))), axis=1)
     label_arr = np.array(LABELS)
     predictions = label_arr[predictions]
 
     # print(predictions)
 
     loss, accuracy = model.evaluate(
-        batch_gen(dsGen, BATCH), steps=int(np.ceil(len(dsGen.df)/BATCH)))
+        batch_gen(df, BATCH, dsGen), steps=int(np.ceil(len(df)/BATCH)))
     delay_ms = (time.time() - start_time)*1000
 
     time.sleep(2)  # sleep for 5 seconds
@@ -44,15 +46,14 @@ def main():
     print(f"Loss: {loss} \nAccuracy: {accuracy}\nItems: {num_utterances}\nDelay: {delay_ms}\nDelay Per: {delay_ms/num_utterances}")
 
     print(df)
-    df.to_csv("dataframe_new.csv", index=False)
+    df.to_csv("NEW_TEST_SET_dataframe_output.csv", index=False)
 
     return 0
 
 
-def batch_gen(dsGen, batch_size):
+def batch_gen(df, batch_size, dsGen):
     while True:
         # Depending on mode select DataFrame with paths
-        df = dsGen.df
         ids = list(range(df.shape[0]))
 
         # Create batches (for training data the batches are randomly permuted)
