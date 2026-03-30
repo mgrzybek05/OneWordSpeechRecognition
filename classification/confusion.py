@@ -9,16 +9,22 @@ plt.rcParams['xtick.top'] = False
 plt.rcParams['ytick.right'] = False
 
 # Load CSV
-dt_pi = pd.read_csv("NEW_TEST_SET_dataframe_output.csv")
+df = pd.read_csv("NEW_TEST_SET_dataframe_output.csv")
+dt_pi = df[~df["wav_file"].str.contains("_0.wav")]
+
+l = len(dt_pi)
+c = (dt_pi["label"] == dt_pi["prediction"]).sum()
+
+print(f"Accuracy = {c}/{l} = {c/l * 100}")
 
 # df_stm = pd.read_excel(
 #   "C:/Work/f25/f25_datatest_testing/python/output/results_new_dataset_75ACC_LETS_GOOO.xlsx")
 
-df_stm = pd.read_csv("stm_results.csv")
+# df_stm = pd.read_csv("stm_results.csv")
 
 # Compute confusion matrix
 pi_cm = confusion_matrix(dt_pi["label"], dt_pi["prediction"])
-stm_cm = confusion_matrix(df_stm["keyword"], df_stm["prediction"])
+# stm_cm = confusion_matrix(df_stm["keyword"], df_stm["prediction"])
 
 # cm = df_stm_2.drop(columns=['Keyword']).to_numpy()
 # print(cm)
@@ -33,12 +39,13 @@ ax.figsize = (3.5, 2.5)
 plt.savefig('pi_confusion_matrix_new.pdf', bbox_inches='tight')
 plt.show()
 
+'''
 disp = ConfusionMatrixDisplay(confusion_matrix=stm_cm, display_labels=labels)
 disp.plot(cmap="Blues")
 ax = plt.gca()
 ax.figsize = (3.5, 2.5)
 plt.savefig('stm_confusion_matrix.pdf', bbox_inches='tight')
-plt.show()
+plt.show()'''
 
 labels = ["Down", "Go", "Left", "No", "Right", "Stop", "Up", "Yes", "Noise"]
 

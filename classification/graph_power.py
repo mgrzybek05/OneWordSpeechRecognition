@@ -1,5 +1,6 @@
 import pandas as pd
 import matplotlib.pyplot as plt
+import numpy as np
 
 plt.rcParams.update({'font.size': 8})  # Set default font size to 12
 plt.rcParams['xtick.direction'] = 'in'
@@ -38,6 +39,8 @@ plt.tight_layout()
 plt.xlabel('Time (s)')
 plt.ylabel('Power (mW)')
 plt.xlim(5.5, 8.5)
+ticks = np.arange(5.5, 8.6, 0.5)
+plt.xticks(ticks, ticks - 5.5)
 plt.grid()
 '''alpha = 0.15
 plt.axvspan(0.20, 4.5, color='purple', alpha=alpha,
@@ -47,7 +50,7 @@ plt.axvspan(6.10, 7.86, color='blue', alpha=alpha,
 plt.axvspan(9.4, 11, color='green', alpha=alpha,
             label='output')  # shade output area
 plt.legend(fontsize=8, frameon=True, loc='upper left')'''
-plt.savefig('pi_power.pdf', bbox_inches='tight')
+plt.savefig('pi_power_new.pdf', bbox_inches='tight')
 plt.show()
 
 # plot power consumption of stm32
@@ -59,5 +62,5 @@ plt.ylabel('Power (mW)')
 plt.ylim(bottom=0)
 plt.xlim(left=0, right=23)
 plt.grid()
-plt.savefig('stm_power.pdf', bbox_inches='tight')
+plt.savefig('stm_power_new.pdf', bbox_inches='tight')
 plt.show()

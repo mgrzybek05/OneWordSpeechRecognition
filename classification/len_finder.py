@@ -1,0 +1,56 @@
+from keras.models import load_model
+from numpy import array, asarray, shape
+import numpy as np
+from dataset import DatasetGenerator
+import random
+from keras.utils import to_categorical
+import time
+import pandas as pd
+
+
+MODEL_DIR = 'NEW_TEST_DATASET_model.keras'
+DIR = "C:/Work/datasets/google_speech_commands"  # unzipped train and test data
+
+TEST_SET = 'test_set_X_y.csv'  # csv with test set
+BATCH = 32
+
+
+def main():
+    LABELS = 'down go left no right stop up yes'.split()
+    dsGen = DatasetGenerator(label_set=LABELS)
+    df = dsGen.load_data(DIR, 37)
+    n = len(list(range(df.shape[0])))
+    print(df['wav_file'][0])
+    print(f"Dataset samples: {n}")
+
+    df_ = dsGen.load_test_set(DIR, TEST_SET, 37)
+    df = dsGen.df
+    n = len(list(range(df.shape[0])))
+    print(
+        f"Total samples: {n} \nTrain samples: {0.85*n}\nDev samples: {0.15*n}")
+
+    return 0
+
+
+def batch_gen(df, batch_size, dsGen):
+    while True:
+        # Depending on mode select DataFrame with paths
+        ids = list(range(df.shape[0]))
+
+        # Create batches (for training data the batches are randomly permuted)
+        for start in range(0, len(ids), batch_size):
+            X_batch = []
+            y_batch = []
+            end = min(start + batch_size, len(ids))
+            i_batch = ids[start:end]
+            for i in i_batch:
+                X_batch.append(dsGen.process_wav_file(df.wav_file.values[i]))
+                y_batch.append(df.label_id.values[i])
+            X_batch = np.array(X_batch)
+
+            y_batch = to_categorical(y_batch, num_classes=len(dsGen.label_set))
+            yield (X_batch, y_batch)
+
+
+if __name__ == '__main__':
+    main()
